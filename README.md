@@ -1,5 +1,7 @@
 # Chronos
 
+![](https://github.com/festum/chronos/workflows/Test/badge.svg)
+
 A Chinese day converter
 
 ## Example
