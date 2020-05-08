@@ -5,27 +5,12 @@ import (
 	"strconv"
 )
 
-const (
-	cvalue20 = iota
-	cvalue21
-	cvalue22
-)
-
-var ctable = []float64{
-	cvalue20: 4.6295,
-	cvalue21: 3.87,
-	cvalue22: 4.15,
-}
 var heavenlyStem = []string{
 	`甲`, `乙`, `丙`, `丁`, `戊`, `己`, `庚`, `辛`, `壬`, `癸`,
 }
 
 var earthyBranch = []string{
-	`子`, `丑`, `寅`, `卯`, `辰`, `巳`, `午`, `未`, `申`, `酉`, `戌`, `亥`,
-}
-
-var zodiacs = []string{
-	`鼠`, `牛`, `虎`, `兔`, `龙`, `蛇`, `马`, `羊`, `猴`, `子`, `狗`, `猪`,
+	`子`, `醜`, `寅`, `卯`, `辰`, `巳`, `午`, `未`, `申`, `酉`, `戌`, `亥`,
 }
 
 var stemBranchTable = []string{
@@ -142,25 +127,10 @@ var termInfoList = []string{
 	`7f0e27f1487f531b0b0bb0b6fb0722`, //2100
 }
 
-var number = []string{`一`, `二`, `三`, `四`, `五`, `六`, `七`, `八`, `九`, `十`, `十一`, `十二`}
-var ten = []string{`初`, `十`, `廿`, `卅`}
-
-//月历月份
-var chineseNumber = []string{`正`, `二`, `三`, `四`, `五`, `六`, `七`, `八`, `九`, `十`, `十一`, `腊`}
-
-//公历每个月份的天数
-var monthDay = []int{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-
-//12星座
-var constellation = []string{
-	`魔羯`, `水瓶`, `双鱼`, `白羊`, `金牛`, `双子`, `巨蟹`, `狮子`, `处女`, `天秤`, `天蝎`, `射手`,
-}
-
 func fixSuffix(y int) int {
 	return y - 1900
 }
 
-//GetLunarInfo 取得月历信息
 func GetLunarInfo(y int) int {
 	y = fixSuffix(y)
 	if y < 0 || y > len(lunarInfoList) {
@@ -169,7 +139,6 @@ func GetLunarInfo(y int) int {
 	return lunarInfoList[y]
 }
 
-// GetTermInfo ...
 func GetTermInfo(y, n int) int {
 	y = fixSuffix(y)
 	if y < 0 || y > len(termInfoList) {
@@ -191,15 +160,13 @@ func getChineseYear(year int) string {
 	return StemBranchYear(year) + "年"
 }
 
-//getChineseMonth 取得月历月
 func getChineseMonth(m int) string {
 	if m > 12 || m < 1 {
 		return "?月"
 	}
-	return chineseNumber[m-1] + "月" //加上月字
+	return []string{`正`, `二`, `三`, `四`, `五`, `六`, `七`, `八`, `九`, `十`, `十一`, `臘`}[m-1] + "月" //加上月字
 }
 
-//getChineseDay 取得月历日
 func getChineseDay(d int) string {
 	if d < 0 || d > 31 {
 		return "?日"
@@ -214,35 +181,23 @@ func getChineseDay(d int) string {
 		s = `三十`
 	default:
 		n := (d - 1) % 10
-		s = ten[d/10] + number[n]
+		s = []string{`初`, `十`, `廿`, `卅`}[d/10] + []string{`一`, `二`, `三`, `四`, `五`, `六`, `七`, `八`, `九`, `十`, `十一`, `十二`}[n]
 	}
 	return s + "日"
 
 }
 
-//GetStemBranch 取得干支
 func GetStemBranch(y int) string {
 	return heavenlyStem[y%10] + earthyBranch[y%12]
 }
 
-//StemBranchHour 获取时柱
-//　	子 　　丑 　　寅 　　卯 　　辰 　　己
-//　　　23-01：01-03：03-05 :05-07：07-09：09-11
-//　　　午 　　未 　　申 　　酉 　　戊 　　亥
-//　　　11-13：13-15：15-17：17-19：19-21：21-23
-//`甲子`, `乙丑`, `丙寅`, `丁卯`, `戊辰`, `己巳`, `庚午`, `辛未`, `壬申`, `癸酉`, `甲戌`, `乙亥`, //甲或己日
-//`丙子`, `丁丑`, `戊寅`, `己卯`, `庚辰`, `辛巳`, `壬午`, `癸未`, `甲申`, `乙酉`, `丙戌`, `丁亥`, //乙或庚日
-//`戊子`, `己丑`, `庚寅`, `辛卯`, `壬辰`, `癸巳`, `甲午`, `乙未`, `丙申`, `丁酉`, `戊戌`, `己亥`, //丙或辛日
-//`庚子`, `辛丑`, `壬寅`, `癸卯`, `甲辰`, `乙巳`, `丙午`, `丁未`, `戊申`, `己酉`, `庚戌`, `辛亥`, //丁或壬日
-//`壬子`, `癸丑`, `甲寅`, `乙卯`, `丙辰`, `丁巳`, `戊午`, `己未`, `庚申`, `辛酉`, `壬戌`, `癸亥`, //戊或癸日
 func StemBranchHour(y, m, d, h int) string {
 	i := stemBranchIndex(y, m, d) % 5 * 12
 	idx := (h + 1) / 2 % 12
 	return stemBranchTable[fixDayNext(i, idx, h)]
 }
 
-//待优化
-func fixDayNext(row int, idx int, hour int) int {
+func fixDayNext(row int, idx int, hour int) int { //TODO: refactoring
 	if hour >= 23 {
 		idx += 12
 	}
@@ -264,17 +219,14 @@ func stemBranchIndex(y, m, d int) int {
 	return (yearNumber[y] + monthNumber[m] + d - 1) % 60
 }
 
-// StemBranchDay 获取日柱
 func StemBranchDay(y, m, d int) string {
 	return stemBranchTable[stemBranchIndex(y, m, d)]
 }
 
-//StemBranchMonth 获取月柱
 func StemBranchMonth(y, m, d int) string {
-	//月柱 1900年1月小寒以前为 丙子月(60进制12)
-	fir := GetTermInfo(y, m*2-1) //返回当月「节」为几日开始
-
-	//依据12节气修正干支月
+	//月柱 1900年1月小寒以前為 丙子月(60進位制12)
+	fir := GetTermInfo(y, m*2-1) //返回當月「節」為幾日開始
+	//依據12節氣修正干支月
 	var sb = GetStemBranch(fixSuffix(y)*12 + m + 11)
 	if d >= fir {
 		sb = GetStemBranch(fixSuffix(y)*12 + m + 12)
@@ -282,28 +234,27 @@ func StemBranchMonth(y, m, d int) string {
 	return sb
 }
 
-//StemBranchYear 获取年柱
 func StemBranchYear(y int) string {
 	num := y - 4
 	return heavenlyStem[num%10] + earthyBranch[num%12]
 }
 
 func centuryCValue(y int) float64 {
-	switch {
+	switch { // century 20th ~ 22th
 	case y > 1901 && y <= 2000:
-		return ctable[cvalue20]
+		return 4.6295
 	case y >= 2001 && y <= 2100:
-		return ctable[cvalue21]
+		return 3.87
 	case y >= 2101 && y <= 2200:
-		return ctable[cvalue22]
+		return 4.15
 	}
 	panic(fmt.Sprintf("not supported(%d)", y))
 }
 
-func getLiChunDay(year int) int {
+func lichunDay(year int) int {
+	// https://en.wikipedia.org/wiki/Lichun
 	c := centuryCValue(year)
 	y := float64(year % 100)
 	l := int((y - 1) / 4)
 	return int((y*0.2422+c)/1 - float64(l))
-
 }
