@@ -13,9 +13,9 @@ chronos.New() // Base on current date
 chronos.New(time.Now()) // Time interface
 d := chronos.New("2019/10/30 01:30") // string interface
 l := d.Lunar() // Get lunar calendar
-fmt.Println(l.Date())
+fmt.Println(l.String())
 // print: "己亥年十月初三"
-fmt.Println(l.EightCharacter())
+fmt.Println(l.EightChar())
 // print: "己 亥 甲 戌 庚 子 丁 丑"
 d.Solar() // Get solar calendar
 ```

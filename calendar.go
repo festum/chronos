@@ -16,7 +16,6 @@ type calendar struct {
 type Calendar interface {
 	Lunar() *Lunar
 	Solar() *Solar
-	LunarDate() string
 }
 
 type CalendarData interface {
@@ -56,8 +55,4 @@ func (c *calendar) Lunar() *Lunar {
 
 func (c *calendar) Solar() *Solar {
 	return &Solar{time: c.time}
-}
-
-func (c *calendar) LunarDate() string {
-	return c.Lunar().Date()
 }

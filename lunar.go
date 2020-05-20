@@ -47,7 +47,7 @@ func (l *Lunar) Calendar() Calendar {
 	return New(t)
 }
 
-func (l *Lunar) EightCharacter() []string {
+func (l *Lunar) EightChar() []string {
 	rlt := l.YearString(l.lichunOffset) + l.MonthString() + l.DayString() + l.HourString()
 	return strings.Split(rlt, "")
 }
@@ -230,7 +230,7 @@ func daysBetween(d time.Time, s time.Time) int {
 	return int(subValue)
 }
 
-func Solar2Lunar(time time.Time) string {
+func LunarString(time time.Time) string {
 	lunar := CalculateLunar(time.Format(_dateFormat))
 	result := StemBranchYear(lunar.year) + "年"
 	if lunar.leap && (lunar.month == lunar.leapMonth) {
@@ -241,7 +241,7 @@ func Solar2Lunar(time time.Time) string {
 	return result
 }
 
-func (lunar *Lunar) Date() string {
+func (lunar *Lunar) String() string {
 	result := getChineseYear(lunar.year)
 	if lunar.isLeap() {
 		result += "閏"
