@@ -58,4 +58,5 @@ func TestLunarEightCharacter(t *testing.T) {
 	expected := strings.Split("己 亥 甲 戌 辛 丑 戊 子", " ")
 	assert.Equal(expected, chronos.New("2019/10/30 23:00").Lunar().EightCharacter())
 	assert.Equal(expected, chronos.New("2019/10/31 00:30").Lunar().EightCharacter())
+	assert.Equal("己亥年十月初三日", chronos.New("2019/10/30 23:00").Lunar().Date())
 }
