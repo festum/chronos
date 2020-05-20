@@ -167,11 +167,10 @@ func getChineseMonth(m int) string {
 	return []string{`正`, `二`, `三`, `四`, `五`, `六`, `七`, `八`, `九`, `十`, `十一`, `臘`}[m-1] + "月" //加上月字
 }
 
-func getChineseDay(d int) string {
+func getChineseDay(d int) (s string) {
 	if d < 0 || d > 31 {
-		return "?日"
+		return "?"
 	}
-	var s string
 	switch d {
 	case 10:
 		s = `初十`
@@ -183,8 +182,7 @@ func getChineseDay(d int) string {
 		n := (d - 1) % 10
 		s = []string{`初`, `十`, `廿`, `卅`}[d/10] + []string{`一`, `二`, `三`, `四`, `五`, `六`, `七`, `八`, `九`, `十`, `十一`, `十二`}[n]
 	}
-	return s + "日"
-
+	return s
 }
 
 func GetStemBranch(y int) string {
